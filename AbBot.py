@@ -6,6 +6,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from googlesearch import search
 import random
 
 load_dotenv() # make sure you have all the things below filled out in your .env file
@@ -48,6 +49,27 @@ async def heart(ctx):
 @bot.command(name='invite', help='sends invite link :>') # self explanatory
 async def invite(ctx):
     await ctx.send("i heard you wanted to add me to your server! here's the link " + random.choice(heartsList) + "\nhttps://discord.com/oauth2/authorize?client_id=748302551933517835&permissions=8&scope=bot")
+
+@bot.command(name='google', help='google search!!') # kind of disgustingly rudimentary, it just returns a link of the first thing it finds
+async def websearch(ctx, *args):
+    if args != ():
+        query = '{}'.format(' '.join(args))
+        for output in search(query, tld="com", num=1, stop=1, pause=1.0):
+            await ctx.send(output)
+    else:
+        await ctx.send("i can't search for nothing,,")
+
+@bot.listen()
+async def on_message(message):
+    if "cope" in message.content:
+        emoji = '<:COPE:848006983726530601>'
+        await message.add_reaction(emoji)
+
+@bot.listen()
+async def on_message(message):
+    if "hope" in message.content:
+        emoji = '<:HOPE:848007900517629973>'
+        await message.add_reaction(emoji)
 
 @bot.command(name='addHi', hidden=True) # adds a greeting to files/helloList.txt
 async def addHi(ctx, *args):            # if you're not me and you're running a copy of this, add your userID to the .env file
