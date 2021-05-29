@@ -6,7 +6,7 @@ does very little, i lost the functional code so now i have to remake it. don't e
 ## commands
 do <help lmao
 
-### Requirements to run the bot yourself:
+## Requirements to run the bot yourself:
 (i think this is it, im not entirely sure)
   pip installs:
     beautifulsoup4
