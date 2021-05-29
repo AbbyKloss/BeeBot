@@ -74,7 +74,7 @@ async def removeHi(ctx, *args):
             badGreeting = '{}'.format(' '.join(args))
             if badGreeting in helloList:
                 helloList.remove(badGreeting)
-                helloFile = open("files.helloList.txt", "w")
+                helloFile = open("files/helloList.txt", "w")
                 for greeting in helloList: # im sure there's a better way of fixing the list than this, but this is what i got right now. it sucks the larger the list gets
                     helloFile.write(greeting + '\n')
                 helloFile.close()
