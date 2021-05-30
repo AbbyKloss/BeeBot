@@ -5,6 +5,7 @@ import os
 
 import discord
 from discord.ext import commands
+from discord.ext import tasks
 from dotenv import load_dotenv
 from googlesearch import search
 import random
@@ -14,17 +15,39 @@ TOKEN    = os.getenv('DISCORD_TOKEN')
 GUILD    = os.getenv('DISCORD_GUILD')
 ADMIN_ID = os.getenv('ADMIN_ID')
 
-import discord
-from discord.ext import commands
+# randomize statuses so it doesn't feel so static
+gameStatuses = ["with your heart💙", "critically acclaimed mmorpg final fantasy fourt teen", "fin fant " + str(random.randrange(1, 15)), "monstie huntie", "lelda of zelda breath of the weath"]
+musicStatuses = ["number 1 victory royale yeah fortnite we boutta get down (get down) 10 kills on the board right now just wiped out tomato town", "spoofy", "music on the you tubes", "tidal (i love jay z)", "More Dunkey More Problems"]
+videoStatuses = ["idk some ding dong video on the you tube", "demons layer ;>", "vine land saga", "zombie vine land saga"]
 
 heartsList = [":heart:",":orange_heart:",":yellow_heart:",":green_heart:",":blue_heart:",":purple_heart:",":brown_heart:",":white_heart:",":cupid:",":gift_heart:",":sparkling_heart:",":heartpulse:",":heartbeat:",":revolving_hearts:",":two_hearts:",":heart_exclamation:",":heart_decoration:"] #there's a finite amount of heart emojis, i don't need a separate file for them
 helloFile = open("files/helloList.txt", "r") #opens a file to let you have as many or as few greetings as you'd like. allows for modularity in the bot without having to restart it every time you wanna add a greeting
 helloList = helloFile.read().splitlines()
 helloFile.close()
-bot = commands.Bot(command_prefix="<", case_insensitive=True, activity=discord.Game('with your heart💙'))
+bot = commands.Bot(command_prefix="<", case_insensitive=True)
 
-print("AbBot is online.") # this line states that you're just ready to zoom, the bot is running
+@tasks.loop(hours=1)       # have to do this one first so we can use it in startup()
+async def status_change(): # randomizes statuses every hour (and also on startup :> )
+    choice = random.randrange(1, 3) # roll 1d3 nerd
+    if choice == 1:   # playing
+        await bot.change_presence(activity=discord.Game(random.choice(gameStatuses)))
+    elif choice == 2: # listening
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=random.choice(musicStatuses)))
+    elif choice == 3: # watching
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=random.choice(videoStatuses)))
 
+async def startup(): # woo startup! so you know it uhh works!
+    print(f'{bot.user} is connected to the following guild(s):\n')
+    for guild in bot.guilds:
+        if guild.name == GUILD:
+            break
+        print(f'{guild.name} (id: {guild.id})')
+    await status_change()
+
+
+@bot.event
+async def on_ready():
+    await startup()
 
 @bot.command(name='hi', help="henlo :>") # says hello :>
 async def hello(ctx, *args):
