@@ -61,20 +61,20 @@ async def websearch(ctx, *args):
 
 @bot.listen()
 async def on_message(message):
-    if "cope" in message.content:
+    if "cope" in message.content.lower():
         emoji = '<:COPE:848006983726530601>'
         await message.add_reaction(emoji)
 
 @bot.listen()
 async def on_message(message):
-    if "hope" in message.content:
+    if "hope" in message.content.lower():
         emoji = '<:HOPE:848007900517629973>'
         await message.add_reaction(emoji)
 
 @bot.listen()
 async def on_message(message):
-    if ("turtle" in message.content) or ("turble" in message.content) or ("tortle" in message.content):
-        emoji = '<:turble:796242924283232297>'
+    if ("turtle" in message.content.lower()) or ("turble" in message.content.lower()) or ("tortle" in message.content.lower()) or ("🐢" in message.content.lower()):
+        emoji = '<:turble:848677634577006643>'
         await message.add_reaction(emoji)
 
 @bot.command(name='addHi', hidden=True) # adds a greeting to files/helloList.txt
