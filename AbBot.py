@@ -71,6 +71,12 @@ async def on_message(message):
         emoji = '<:HOPE:848007900517629973>'
         await message.add_reaction(emoji)
 
+@bot.listen()
+async def on_message(message):
+    if ("turtle" in message.content) or ("turble" in message.content) or ("tortle" in message.content):
+        emoji = '<:turble:796242924283232297>'
+        await message.add_reaction(emoji)
+
 @bot.command(name='addHi', hidden=True) # adds a greeting to files/helloList.txt
 async def addHi(ctx, *args):            # if you're not me and you're running a copy of this, add your userID to the .env file
     if args != ():                      # i did "$dotenv set ADMIN_ID [userID]"
