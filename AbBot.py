@@ -26,7 +26,6 @@ helloList = helloFile.read().splitlines()
 helloFile.close()
 bot = commands.Bot(command_prefix="<", case_insensitive=True)
 
-@tasks.loop(hours=1)       # have to do this one first so we can use it in startup()
 async def status_change(): # randomizes statuses every hour (and also on startup :> )
     choice = random.randrange(1, 3) # roll 1d3 nerd
     if choice == 1:   # playing
@@ -44,10 +43,13 @@ async def startup(): # woo startup! so you know it uhh works!
         print(f'{guild.name} (id: {guild.id})')
     await status_change()
 
-
 @bot.event
 async def on_ready():
     await startup()
+
+@tasks.loop(hours=1)
+async def the_loop():
+    await status_change()
 
 @bot.command(name='hi', help="henlo :>") # says hello :>
 async def hello(ctx, *args):
@@ -116,7 +118,7 @@ async def addHi(ctx, *args):            # if you're not me and you're running a 
             else:
                 await ctx.send("**" + newGreeting + "** already in `helloList.txt`")
         else:
-            await ctx.send("```Access Denied.```")
+            await ctx.send("`Access Denied.`")
 
 @bot.command(name='removeHi', hidden=True) # in case i somehow get a bad greeting in there >:< (angy)
 async def removeHi(ctx, *args):
@@ -134,7 +136,13 @@ async def removeHi(ctx, *args):
             else:
                 await ctx.send("im not seeing **" + badGreeting + "** in the list,,")
         else:
-            await ctx.send("```Access Denied.```")
+            await ctx.send("`Access Denied.`")
 
+@bot.command(name='changeStatus', hidden=True)
+async def changeStatus(ctx):
+    if str(ctx.author.id) == str(ADMIN_ID):
+        await status_change()
+    else:
+        await ctx.send("`Access Denied.`")
 
 bot.run(TOKEN)
