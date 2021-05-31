@@ -75,6 +75,10 @@ async def heart(ctx):
 async def invite(ctx):
     await ctx.send("i heard you wanted to add me to your server! here's the link " + random.choice(heartsList) + "\nhttps://discord.com/oauth2/authorize?client_id=748302551933517835&permissions=8&scope=bot")
 
+@bot.command(name='github', help='github? dont know what that is :>')
+async def github(ctx):
+    await ctx.send("i was told to give you a link so here you go! " + random.choice(heartsList) + "\nhttps://github.com/blampf/AbBot")
+
 @bot.command(name='google', help='google search!!') # kind of disgustingly rudimentary, it just returns a link of the first thing it finds
 async def websearch(ctx, *args):
     if args != ():
@@ -98,7 +102,7 @@ async def on_message(message):
 
 @bot.listen()
 async def on_message(message):
-    if ("turtle" in message.content.lower()) or ("turble" in message.content.lower()) or ("tortle" in message.content.lower()) or ("🐢" in message.content.lower()):
+    if ("turtle" in message.content.lower()) or ("turble" in message.content.lower()) or ("tortle" in message.content.lower()) or ("🐢" in message.content.lower() or ("turdle" in message.content.lower())):
         emoji = '<:turble:848677634577006643>'
         await message.add_reaction(emoji)
 
@@ -142,6 +146,7 @@ async def removeHi(ctx, *args):
 async def changeStatus(ctx):
     if str(ctx.author.id) == str(ADMIN_ID):
         await status_change()
+        await ctx.send("done!")
     else:
         await ctx.send("`Access Denied.`")
 
