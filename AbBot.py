@@ -25,9 +25,9 @@ videoStatuses = ["idk some ding dong video on the you tube", "demons layer ;>", 
 bot = commands.Bot(command_prefix="<", case_insensitive=True, owner_id=int(ADMIN_ID))
 
 extensionList = [
-                'cogs.listeners',
-                'cogs.owner',
-                'cogs.botcommands'
+                'cogs.Listeners',
+                'cogs.Owner',
+                'cogs.BotCommands'
                 ]
 
 async def status_change(): # randomizes statuses every hour (and also on startup :> )
