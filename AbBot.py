@@ -14,7 +14,6 @@ import time
 
 load_dotenv() # make sure you have all the things below filled out in your .env file
 TOKEN    = os.getenv('DISCORD_TOKEN')
-GUILD    = os.getenv('DISCORD_GUILD')
 ADMIN_ID = os.getenv('ADMIN_ID')
 
 # randomize statuses so it doesn't feel so static
@@ -43,8 +42,6 @@ async def status_change(): # randomizes statuses every hour (and also on startup
 async def on_ready(): # woo startup! so you know it uhh works!
     print(f'{bot.user} is connected to the following guild(s):\n')
     for guild in bot.guilds:
-        if guild.name == GUILD:
-            break
         print(f'{guild.name} (id: {guild.id})')
     print(" ")
     for extension in extensionList:
