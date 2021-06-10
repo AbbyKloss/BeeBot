@@ -7,11 +7,11 @@ class Listeners(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if ("cope" in message.content.lower()):
+        if ("cope" in message.content.lower()) or ("copium" in message.content.lower()) or ("coping" in message.content.lower()):
             emoji = '<:COPE:848006983726530601>'
             await message.add_reaction(emoji)
 
-        if ("hope" in message.content.lower()):
+        if ("hope" in message.content.lower()) or ("hoping" in message.content.lower()):
             emoji = '<:HOPE:848007900517629973>'
             await message.add_reaction(emoji)
 

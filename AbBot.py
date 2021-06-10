@@ -31,7 +31,7 @@ extensionList = [
                 ]
 
 async def status_change(): # randomizes statuses every hour (and also on startup :> )
-    choice = random.randrange(1, 3) # roll 1d3 nerd
+    choice = random.randint(1, 3) # roll 1d3 nerd
     if choice == 1:   # playing
         await bot.change_presence(activity=discord.Game(random.choice(gameStatuses)))
     elif choice == 2: # listening
