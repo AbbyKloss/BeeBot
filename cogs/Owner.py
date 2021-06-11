@@ -1,13 +1,37 @@
 import discord
 from discord.ext import commands
+from discord.ext import tasks
+import time
+import random
 
 helloFile = open("files/helloList.txt", "r") #opens a file to let you have as many or as few greetings as you'd like. allows for modularity in the bot without having to restart it every time you wanna add a greeting
 helloList = helloFile.read().splitlines()
 helloFile.close()
 
+# randomize statuses so it doesn't feel so static
+gameStatuses = ["with your heart💙", "critically acclaimed mmorpg final fantasy fourt teen", "fin fant " + str(random.randrange(1, 15)), "monstie huntie", "lelda of zelda breath of the weath"]
+musicStatuses = ["number 1 victory royale yeah fortnite we boutta get down (get down) 10 kills on the board right now just wiped out tomato town", "spoofy", "music on the you tubes", "tidal (i love jay z)", "More Dunkey More Problems", "bent knee live on twiiiitch, bent knee livestreamiiing"]
+videoStatuses = ["idk some ding dong video on the you tube", "demons layer ;>", "vine land saga", "zombie vine land saga"]
+
+
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.the_loop.start()
+
+    async def status_change(self): # randomizes statuses every hour (and also on startup :> )
+        choice = random.randint(1, 3) # roll 1d3 nerd
+        if choice == 1:   # playing
+            await self.bot.change_presence(activity=discord.Game(random.choice(gameStatuses)))
+        elif choice == 2: # listening
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=random.choice(musicStatuses)))
+        elif choice == 3: # watching
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=random.choice(videoStatuses)))
+
+    @tasks.loop(hours=1)
+    async def the_loop(self):
+        print("automatically changed status at: " + time.strftime("%H:%M:%S", time.localtime())) # prints to the console so you know the status actually changed with a timestamp so you know when
+        await self.status_change()
 
     @commands.command(name='addHi', hidden=True) # adds a greeting to files/helloList.txt
     @commands.is_owner()
@@ -44,7 +68,7 @@ class Owner(commands.Cog):
     @commands.command(name='changeStatus', hidden=True) # gotta shake things up sometimes
     @commands.is_owner()
     async def changeStatus(self, ctx):
-        await status_change()
+        await self.status_change(self)
         print("manually changed status at: " + time.strftime("%H:%M:%S", time.localtime()))
         await ctx.send("done!")
 
@@ -92,6 +116,45 @@ class Owner(commands.Cog):
     @commands.is_owner()
     async def owner_check(self, ctx):
         await ctx.send(f'howdy {ctx.author.name}!')
+
+    @commands.command(name="customStatus", hidden=True)
+    @commands.is_owner()
+    async def custom_status(self, ctx, statusType=0, streamlink='NONE', *args):
+        if (int(statusType) <= 4) and (int(statusType) >= 1):
+            if args != ():
+                self.the_loop.cancel()
+                print("stopped loop at: " + time.strftime("%H:%M:%S", time.localtime()))
+                status = '{}'.format(' '.join(args))
+                if statusType == 1:
+                    await self.bot.change_presence(activity=discord.Game(name=status))
+
+                if statusType == 2:
+                    await self.bot.change_presence(activity=discord.Streaming(name=status, url=streamlink, game=status, details=status))
+
+                if statusType == 3:
+                    await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=status))
+
+                if statusType == 4:
+                    await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
+                await ctx.send('done!')
+            else:
+                await ctx.send('you gotta give me something to work with')
+        else:
+            await ctx.send('no type/wrong type')
+
+    @commands.command(name='resumeTheLoop', hidden=True)
+    @commands.is_owner()
+    async def resume_the_loop(self, ctx):
+        self.the_loop.start()
+        await ctx.send('The Loop Has Resumed.')
+
+    @commands.command(name="testPrint", hidden=True)
+    @commands.is_owner()
+    async def test_print(self, ctx, *args):
+        if args != ():
+            printable = '{}'.format(' '.join(args))
+            print('\n' + printable + '\n')
+            await ctx.send('done!')
 
 def setup(bot):
     bot.add_cog(Owner(bot))
