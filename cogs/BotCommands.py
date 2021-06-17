@@ -43,10 +43,41 @@ class BotCommands(commands.Cog):
     async def websearch(self, ctx, *args):
         if args != "":
             query = '{}'.format(' '.join(args))
-            for output in search(query, tld="com", num=1, stop=1, pause=1.0):
+            for output in search(query, tld="com", num=1, stop=1, pause=1.0): # API calls! fun! (it takes a fuckin while to actually get a reasult and sometimes you just don't get anything)
                 await ctx.send(output)
         else:
             await ctx.send("i can't search for nothing,,")
+
+    @commands.command(name='roll', help='rolls **n**d**x**!')
+    async def diceroll(self, ctx, arg="1d6"): # defaults to the most basic of dice
+        num = 1
+        size = 0
+
+        pos = arg.find('d')
+        
+        if pos == -1: # testing if it was input correctly (shhh idk how to make it to where incorrect things after that don't work, i need to look into exception handling)
+            await ctx.send('please format your roll in the **n**d**x** system ' + random.choice(heartsList))
+
+        elif pos == 0: # if the user just input 'd8' it should roll 1d8
+            size = int(arg[pos+1:-1])
+        else:          # if it's input correctly, this will run
+            num = int(arg[0:pos])
+            size = int(arg[pos+1:])
+
+        message = f'**{ctx.author.name}** rolled: ' # setup 
+        for i in range(num):
+            print(i)
+            randomroll = random.randint(1, size)
+            if randomroll == size:
+                randomroll = "***" + str(randomroll) + "***" # nice flavor, it italicizes and bolds a max roll
+            elif randomroll == 1:
+                randomroll = "**" + str(randomroll) + "**" # bolds a min roll
+            if (i+1 != num) and (num != 1):
+                message += str(randomroll) + ", " # appends the roll to the message that'll be sent
+            else:
+                message += str(randomroll) # no extra commas, please
+        await ctx.send(message)
+
 
 def setup(bot):
     bot.add_cog(BotCommands(bot))

@@ -11,9 +11,9 @@ class Listeners(commands.Cog):
             emoji = '<:COPE:848006983726530601>'
             await message.add_reaction(emoji)
 
-        if ("hope" in message.content.lower()) or ("hoping" in message.content.lower()):
+        '''if ("hope" in message.content.lower()) or ("hoping" in message.content.lower()): # got tired of hope, comes up too often and nagito is a fuck
             emoji = '<:HOPE:848007900517629973>'
-            await message.add_reaction(emoji)
+            await message.add_reaction(emoji)'''
 
         if ("turtle" in message.content.lower()) or ("turble" in message.content.lower()) or ("tortle" in message.content.lower()) or ("🐢" in message.content.lower() or ("turdle" in message.content.lower())):
             emoji = '<:turble:848677634577006643>'
