@@ -66,7 +66,6 @@ class BotCommands(commands.Cog):
 
         message = f'**{ctx.author.name}** rolled: ' # setup 
         for i in range(num):
-            print(i)
             randomroll = random.randint(1, size)
             if randomroll == size:
                 randomroll = "***" + str(randomroll) + "***" # nice flavor, it italicizes and bolds a max roll
