@@ -48,10 +48,12 @@ class BotCommands(commands.Cog):
         else:
             await ctx.send("i can't search for nothing,,")
 
-    @commands.command(name='roll', help='rolls **n**d**x**!')
-    async def diceroll(self, ctx, arg="1d6"): # defaults to the most basic of dice
+    @commands.command(name='roll', help='rolls ndx! (add adv or dis afterwards to get (dis)advantage)')
+    async def diceroll(self, ctx, arg="1d6", adv="no"): # defaults to the most basic of dice
         num = 1
         size = 0
+        sum = 0
+        maxnum = 0
 
         pos = arg.find('d')
         
@@ -63,19 +65,30 @@ class BotCommands(commands.Cog):
         else:          # if it's input correctly, this will run
             num = int(arg[0:pos])
             size = int(arg[pos+1:])
-
-        message = f'**{ctx.author.name}** rolled: ' # setup 
-        for i in range(num):
-            randomroll = random.randint(1, size)
-            if randomroll == size:
-                randomroll = "***" + str(randomroll) + "***" # nice flavor, it italicizes and bolds a max roll
-            elif randomroll == 1:
-                randomroll = "**" + str(randomroll) + "**" # bolds a min roll
-            if (i+1 != num) and (num != 1):
-                message += str(randomroll) + ", " # appends the roll to the message that'll be sent
-            else:
-                message += str(randomroll) # no extra commas, please
-        await ctx.send(message)
+        minnum = size
+        if size > 0:
+            message = f'**{ctx.author.name}** rolled: ' # setup 
+            for i in range(num):
+                randomroll = random.randint(1, size)
+                maxnum = max(maxnum, randomroll)
+                minnum = min(minnum, randomroll)
+                sum += randomroll
+                if randomroll == size:
+                    randomroll = "***" + str(randomroll) + "***" # nice flavor, it italicizes and bolds a max roll
+                elif randomroll == 1:
+                    randomroll = "**" + str(randomroll) + "**" # bolds a min roll
+                if (i+1 != num) and (num != 1):
+                    message += str(randomroll) + ", " # appends the roll to the message that'll be sent
+                else:
+                    message += str(randomroll) # no extra commas, please
+            message += '\nSum: ' + str(sum)
+            if adv[0] == "a":
+                message += '\nADV: ' + str(maxnum)
+            elif adv[0] == "d":
+                message += '\nDIS: ' + str(minnum)
+            await ctx.send(message)
+        else:
+            await ctx.send("You Rolled.")
 
 
 def setup(bot):
