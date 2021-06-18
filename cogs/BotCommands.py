@@ -52,20 +52,27 @@ class BotCommands(commands.Cog):
     async def diceroll(self, ctx, arg="1d6", adv="no"): # defaults to the most basic of dice
         num = 1
         size = 0
+        add = 0
         sum = 0
         maxnum = 0
 
         pos = arg.find('d')
+        pluspos = arg.find('+')
         
         if pos == -1: # testing if it was input correctly (shhh idk how to make it to where incorrect things after that don't work, i need to look into exception handling)
             await ctx.send('please format your roll in the **n**d**x** system ' + random.choice(heartsList))
 
-        elif pos == 0: # if the user just input 'd8' it should roll 1d8
-            size = int(arg[pos+1:-1])
-        else:          # if it's input correctly, this will run
-            num = int(arg[0:pos])
+        elif (pos == 0) and (pluspos == -1): # if the user just input 'd8' it should roll 1d8
             size = int(arg[pos+1:])
+        elif (pos != 0) and (pluspos == -1):          # if it's input correctly, this will run
+            num = int(arg[:pos])
+            size = int(arg[pos+1:])
+        else:
+            num = int(arg[:pos])
+            size = int(arg[pos+1:pluspos])
+            add = int(arg[pluspos+1:])
         minnum = size
+        sum += add
         if size > 0:
             message = f'**{ctx.author.name}** rolled: ' # setup 
             for i in range(num):
@@ -81,7 +88,7 @@ class BotCommands(commands.Cog):
                     message += str(randomroll) + ", " # appends the roll to the message that'll be sent
                 else:
                     message += str(randomroll) # no extra commas, please
-            message += '\nSum: ' + str(sum)
+            message += ' (+' + str(add) + ')\nSum: ' + str(sum)
             if adv[0] == "a":
                 message += '\nADV: ' + str(maxnum)
             elif adv[0] == "d":
