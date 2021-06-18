@@ -88,7 +88,9 @@ class BotCommands(commands.Cog):
                     message += str(randomroll) + ", " # appends the roll to the message that'll be sent
                 else:
                     message += str(randomroll) # no extra commas, please
-            message += ' (+' + str(add) + ')\nSum: ' + str(sum)
+            if (pluspos != -1):
+                message += ' (+' + str(add) + ')'
+            message +='\nSum: ' + str(sum)
             if adv[0] == "a":
                 message += '\nADV: ' + str(maxnum)
             elif adv[0] == "d":
