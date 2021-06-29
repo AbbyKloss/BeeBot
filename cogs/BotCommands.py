@@ -61,6 +61,7 @@ class BotCommands(commands.Cog):
         
         if pos == -1: # testing if it was input correctly (shhh idk how to make it to where incorrect things after that don't work, i need to look into exception handling)
             await ctx.send('please format your roll in the **n**d**x** system ' + random.choice(heartsList))
+            return
 
         elif (pos == 0) and (pluspos == -1): # if the user just input 'd8' it should roll 1d8
             size = int(arg[pos+1:])
@@ -71,9 +72,12 @@ class BotCommands(commands.Cog):
             num = int(arg[:pos])
             size = int(arg[pos+1:pluspos])
             add = int(arg[pluspos+1:])
+        if (num > 300) or (size > 300):
+            await ctx.send('too big........')
+            return
         minnum = size
         sum += add
-        if size > 0:
+        if (size > 0) and (num > 0):
             message = f'**{ctx.author.name}** rolled: ' # setup 
             for i in range(num):
                 randomroll = random.randint(1, size)
