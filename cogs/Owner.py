@@ -10,7 +10,7 @@ helloFile.close()
 
 # randomize statuses so it doesn't feel so static
 gameStatuses = ["with your heart💙", "critically acclaimed mmorpg final fantasy fourt teen", "fin fant " + str(random.randrange(1, 15)), "monstie huntie", "lelda of zelda breath of the weath"]
-musicStatuses = ["number 1 victory royale yeah fortnite we boutta get down (get down) 10 kills on the board right now just wiped out tomato town", "spoofy", "music on the you tubes", "tidal (i love jay z)", "More Dunkey More Problems", "bent knee live on twiiiitch, bent knee livestreamiiing"]
+musicStatuses = ["number 1 victory royale yeah fortnite we boutta get down (get down) 10 kills on the board right now just wiped out tomato town", "spoofy", "music on the you tubes", "tidal (i love jay z)", "More Dunkey More Problems", "bent knee live on twiiiitch, bent knee livestreamiiing", "hey ken", "thanking the scientist", "lucy dash attack cancel up smash", "andwew jacksom jihawd uwu", "the deer hunter (he shoots bucks)", "sidney tarball monstro", "🍑 pit", "modest 🐀", "bright 👀"]
 videoStatuses = ["idk some ding dong video on the you tube", "demons layer ;>", "vine land saga", "zombie vine land saga"]
 
 
@@ -19,8 +19,9 @@ class Owner(commands.Cog):
         self.bot = bot
         self.the_loop.start()
 
-    async def status_change(self): # randomizes statuses every hour (and also on startup :> )
-        choice = random.randint(1, 3) # roll 1d3 nerd
+    async def status_change(self, choice="roll"): # randomizes statuses every hour (and also on startup :> )
+        if (choice != 1) or (choice != 2) or (choice != 3) :
+            choice = random.randint(1, 3) # roll 1d3 nerd
         if choice == 1:   # playing
             await self.bot.change_presence(activity=discord.Game(random.choice(gameStatuses)))
         elif choice == 2: # listening
@@ -67,8 +68,8 @@ class Owner(commands.Cog):
 
     @commands.command(name='changeStatus', hidden=True) # gotta shake things up sometimes
     @commands.is_owner()
-    async def changeStatus(self, ctx):
-        await self.status_change(self)
+    async def changeStatus(self, ctx, arg):
+        await self.status_change(arg)
         print("manually changed status at: " + time.strftime("%H:%M:%S", time.localtime()))
         await ctx.send("done!")
 
