@@ -33,7 +33,7 @@ class BotCommands(commands.Cog):
 
     @commands.command(name='invite', help='sends invite link :>') # self explanatory
     async def invite(self, ctx):
-        await ctx.send("i heard you wanted to add me to your server! here's the link " + random.choice(heartsList) + "\nhttps://discord.com/oauth2/authorize?client_id=748302551933517835&permissions=8&scope=bot")
+        await ctx.send("i heard you wanted to add me to your server! here's the link " + random.choice(heartsList) + "\nhttps://discord.com/oauth2/authorize?client_id=748302551933517835&permissions=2147798080&scope=bot")
 
     @commands.command(name='github', help='github? dont know what that is :>')
     async def github(self, ctx):

@@ -19,8 +19,8 @@ class Owner(commands.Cog):
         self.bot = bot
         self.the_loop.start()
 
-    async def status_change(self, choice="roll"): # randomizes statuses every hour (and also on startup :> )
-        if (choice != 1) or (choice != 2) or (choice != 3) :
+    async def status_change(self, choice=0): # randomizes statuses every hour (and also on startup :> )
+        if (choice != 1) and (choice != 2) and (choice != 3) :
             choice = random.randint(1, 3) # roll 1d3 nerd
         if choice == 1:   # playing
             await self.bot.change_presence(activity=discord.Game(random.choice(gameStatuses)))
@@ -69,8 +69,8 @@ class Owner(commands.Cog):
     @commands.command(name='changeStatus', hidden=True) # gotta shake things up sometimes
     @commands.is_owner()
     async def changeStatus(self, ctx, arg):
-        await self.status_change(arg)
-        print("manually changed status at: " + time.strftime("%H:%M:%S", time.localtime()))
+        await self.status_change(int(arg)) # wanna implement a system that makes sure that the arg is an integer before passing it but im not that smart
+        print("manually changed status at: " + time.strftime("%H:%M:%S", time.localtime())) # just gonna rely on only me being the one to use these commands
         await ctx.send("done!")
 
     @commands.command(name='loadCog', hidden=True) # taken from https://gist.github.com/EvieePy/d78c061a4798ae81be9825468fe146be
@@ -116,7 +116,14 @@ class Owner(commands.Cog):
     @commands.command(name="ownerCheck", hidden=True)
     @commands.is_owner()
     async def owner_check(self, ctx):
-        await ctx.send(f'howdy {ctx.author.name}!')
+        await ctx.send(f'howdy **{ctx.author.name}**!')
+
+    @commands.command(name="homeowneredCheck", hidden=True)
+    async def homeownered_check(self, ctx):
+        if ctx.author.id == 537075857596874753:
+            await ctx.send(f'howdy **{ctx.author.name}**!')
+        else:
+            await ctx.send("fuck you you rat bastard trying to look like **Homeownered (David)#0656**")
 
     @commands.command(name="customStatus", hidden=True)
     @commands.is_owner()

@@ -21,6 +21,7 @@ extensionList = [
                 'cogs.Listeners',
                 'cogs.Owner',
                 'cogs.BotCommands'
+                'cogs.Autosend'
                 ]
 
 @bot.event
