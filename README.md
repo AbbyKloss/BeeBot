@@ -16,6 +16,9 @@ there are also hidden commands but those are just for the person hosting the bot
     - discord
 
 ## Recent Edits
+(8/5/2021)
+- added a reminder for Fate/Grand Order so people don't forget to log in
+
 (7/15/2021)
 - Added Autosend (feliz jueves)
 - modified the invite link, no longer has admin perms (should've never had that, whoops)
@@ -33,3 +36,4 @@ there are also hidden commands but those are just for the person hosting the bot
 
 ## Todo
 - figure out tweepy so i can add out of touch thursdays to this
+- maybe move all the optin/optout files to a different folder

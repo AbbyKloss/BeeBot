@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ext import tasks
 import time
 import datetime
+from datetime import timezone
 
 optOutFile = open("files/optOutList.txt", "r")
 optOutList = optOutFile.read().splitlines()
@@ -11,6 +12,11 @@ optInFile = open("files/optInList.txt", "r")
 optInList = optInFile.read().splitlines()
 optOutFile.close()
 channelList = optInList.copy()
+
+fgoFile = open("files/fgoList.txt", "r")
+fgoList = fgoFile.read().splitlines()
+fgoFile.close()
+fgoChannelList = fgoList.copy() # not currently sure i need this, i haven't planned very far ahead
 
 class Autosend(commands.Cog):
     def __init__(self, bot):
@@ -21,26 +27,49 @@ class Autosend(commands.Cog):
                         channelList.append(channel.id)
                         #print(channelList)
         self.thursday_loop.start()
+        self.fgo_reminder_loop.start()
 
-    """async def get_memes_channels(self):
-        for guild in self.bot.guilds:
-                for channel in guild.text_channels:
-                    if ("memes" in channel.name) and not (channel.name in optOutList):
-                        channelList.append(channel.id)
-                        print(channelList)"""
+    async def finally_thursday(self):
+        for channelItem in channelList:
+            channel = self.bot.get_channel(int(channelItem))
+            try:
+                await channel.send(content="https://cdn.discordapp.com/attachments/710704410329743390/865314343138361354/Its_Wednesday_or_as_I_like_to_call_it.mp4")
+            except discord.errors.Forbidden:
+                print("unallowed to enter " + str(channel.name) + "; " + str(channelItem))
 
-    @tasks.loop(hours=1)
+    async def fgo_login_reminder(self):
+        for channelItem in fgoList:
+            channel = self.bot.get_channel(int(channelItem))
+            try:
+                await channel.send(content="daily reminder to log into fgo :>")
+            except discord.errors.Forbidden:
+                print("unallowed to enter " + str(channel.name) + "; " + str(channelItem))
+
+    async def fgo_timeup(self, utc_time):
+        if (utc_time.hour > 4):
+            timeup = 28 - int(utc_time.hour)
+        else:
+            timeup = 4 - int(utc_time.hour)
+        print(str(timeup) + " hours left")
+
+    @tasks.loop(hours=1.0) # it tries to send much more often than an hour, i don't get it
     async def thursday_loop(self):
         #await get_memes_channels()
         print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
-        if (datetime.datetime.today().weekday() == 3) and (datetime.datetime.now().hour == 12):
+        if (datetime.datetime.today().weekday() == 3) and (datetime.datetime.now().hour == 12): # should send on thursdays around noon
             print(channelList)
-            for channelItem in channelList:
-                channel = self.bot.get_channel(int(channelItem))
-                try:
-                    await channel.send(content="https://cdn.discordapp.com/attachments/710704410329743390/865314343138361354/Its_Wednesday_or_as_I_like_to_call_it.mp4")
-                except discord.errors.Forbidden:
-                    print("unallowed to enter " + str(channel.name))
+            await self.finally_thursday()
+        else:
+            print("not thursday...")
+
+    @tasks.loop(hours=1.0)
+    async def fgo_reminder_loop(self):
+        print ("fgo loop at: " + time.strftime("%H:%M:%S", time.localtime()))
+        utc_time = datetime.datetime.now(timezone.utc)
+        if (utc_time.hour == 4):
+            await self.fgo_login_reminder()
+        else:
+            await self.fgo_timeup(utc_time)
 
     @commands.command(name='optOut', help='opts the current channel out of Autosend') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
@@ -86,7 +115,35 @@ class Autosend(commands.Cog):
         else:
             await ctx.send("you're already good to go!!")
 
+    @commands.command(name='fgoOptIn', help='sets a reminder to log into fgo!')
+    async def fgoOptIn(self, ctx):
+        goodChannel = str(ctx.message.channel.id)
+        if not(goodChannel in fgoChannelList):
+            fgoChannelList.append(goodChannel)
+            fgoList.append(goodChannel)
+            fgoFile = open("files/fgoList.txt", "w")
+            for item in fgoList:
+                fgoFile.write(item + '\n')
+            fgoFile.close()
+            print(fgoChannelList)
+            await ctx.send("done! reminder set :>")
+        else:
+            await ctx.send("reminder's already set!")
 
+    @commands.command(name='fgoOptOut', help='removes the fgo login reminder')
+    async def fgoOptOut(self, ctx):
+        badChannel = str(ctx.message.channel.id)
+        if (badChannel in fgoChannelList):
+            fgoChannelList.remove(badChannel)
+            fgoList.remove(badChannel)
+            fgoFile = open("files/fgoList.txt", "w")
+            for item in fgoList:
+                fgoFile.write(item + '\n')
+            fgoFile.close()
+            print(fgoChannelList)
+            await ctx.send("alright! you won't get reminders anymore :>")
+        else:
+            await ctx.send("you already don't get reminders :/")
 
 def setup(bot):
     bot.add_cog(Autosend(bot))

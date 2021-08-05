@@ -20,7 +20,7 @@ bot = commands.Bot(command_prefix="<", case_insensitive=True, owner_id=int(ADMIN
 extensionList = [
                 'cogs.Listeners',
                 'cogs.Owner',
-                'cogs.BotCommands'
+                'cogs.BotCommands',
                 'cogs.Autosend'
                 ]
 
