@@ -10,10 +10,12 @@ there are also hidden commands but those are just for the person hosting the bot
 ## Requirements to run the bot yourself:
 (i think this is it, im not entirely sure)  
   pip installs:  
-    - beautifulsoup4  
-    - google  
-    - python-dotenv  
-    - discord
+  - beautifulsoup4 (may come with google)
+  - google (may break)
+  - python-dotenv  
+  - discord
+  - time
+  - datetime
 
 ## Recent Edits
 (8/5/2021)
