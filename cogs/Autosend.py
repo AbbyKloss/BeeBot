@@ -45,12 +45,13 @@ class Autosend(commands.Cog):
             except discord.errors.Forbidden:
                 print("unallowed to enter " + str(channel.name) + "; " + str(channelItem))
 
-    async def fgo_timeup(self, utc_time):
+    async def fgo_timeup(self):
+        utc_time = datetime.datetime.now(timezone.utc)
         if (utc_time.hour > 4):
             timeup = 28 - int(utc_time.hour)
         else:
             timeup = 4 - int(utc_time.hour)
-        print(str(timeup) + " hours left")
+        return str(timeup) + " hours left"
 
     @tasks.loop(hours=1.0) # it tries to send much more often than an hour, i don't get it
     async def thursday_loop(self):
@@ -65,11 +66,10 @@ class Autosend(commands.Cog):
     @tasks.loop(hours=1.0)
     async def fgo_reminder_loop(self):
         print ("fgo loop at: " + time.strftime("%H:%M:%S", time.localtime()))
-        utc_time = datetime.datetime.now(timezone.utc)
-        if (utc_time.hour == 4):
+        if (datetime.datetime.now(timezone.utc).hour == 4):
             await self.fgo_login_reminder()
         else:
-            await self.fgo_timeup(utc_time)
+            print(await self.fgo_timeup())
 
     @commands.command(name='optOut', help='opts the current channel out of Autosend') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
@@ -144,6 +144,11 @@ class Autosend(commands.Cog):
             await ctx.send("alright! you won't get reminders anymore :>")
         else:
             await ctx.send("you already don't get reminders :/")
+
+    @commands.command(name='fgoTimeUp', help='time until the daily fgo reset')
+    async def fgoTimeUp(self, ctx):
+        string = await self.fgo_timeup()
+        await ctx.send(string + " until the daily reset")
 
 def setup(bot):
     bot.add_cog(Autosend(bot))

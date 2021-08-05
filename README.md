@@ -18,6 +18,7 @@ there are also hidden commands but those are just for the person hosting the bot
 ## Recent Edits
 (8/5/2021)
 - added a reminder for Fate/Grand Order so people don't forget to log in
+- <fgoTimeUp to know how far away the daily reset is
 
 (7/15/2021)
 - Added Autosend (feliz jueves)
