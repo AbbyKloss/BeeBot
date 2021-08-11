@@ -40,3 +40,4 @@ there are also hidden commands but those are just for the person hosting the bot
 ## Todo
 - figure out tweepy so i can add out of touch thursdays to this
 - maybe move all the optin/optout files to a different folder
+- test webhooks
