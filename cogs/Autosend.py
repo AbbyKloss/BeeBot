@@ -17,17 +17,19 @@ fgoFile = open("files/fgoList.txt", "r")
 fgoList = fgoFile.read().splitlines()
 fgoFile.close()
 fgoChannelList = fgoList.copy() # not currently sure i need this, i haven't planned very far ahead
+#startMinute = datetime.datetime.now(timezone.utc).minute
 
 class Autosend(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.thursday_loop.start()
+        self.fgo_reminder_loop.start()
+
+    async def get_memes_channels(self):
         for guild in self.bot.guilds:
                 for channel in guild.text_channels:
                     if ("memes" in channel.name) and (str(channel.id) not in optOutList) and (str(channel.id) not in channelList):
                         channelList.append(channel.id)
-                        #print(channelList)
-        self.thursday_loop.start()
-        self.fgo_reminder_loop.start()
 
     async def finally_thursday(self):
         for channelItem in channelList:
@@ -47,29 +49,36 @@ class Autosend(commands.Cog):
 
     async def fgo_timeup(self):
         utc_time = datetime.datetime.now(timezone.utc)
-        if (utc_time.hour > 4):
-            timeup = 28 - int(utc_time.hour)
+        minuteForm = ((int(utc_time.hour)*60) + (int(utc_time.minute))) # utc_time but just the hours and minutes in minute form
+        if (utc_time.hour >= 4):
+            timeuntil = 1680
         else:
-            timeup = 4 - int(utc_time.hour)
-        return str(timeup) + " hours left"
+            timeuntil = 240
+        hours = int((timeuntil - minuteForm)/60)
+        minutes = int((timeuntil - minuteForm) - hours*60)
+        return str(hours) + " hours, " + str(minutes) + " minutes left until the daily reset :>"
 
-    @tasks.loop(hours=1.0) # it tries to send much more often than an hour, i don't get it
-    async def thursday_loop(self):
-        #await get_memes_channels()
-        print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
-        if (datetime.datetime.today().weekday() == 3) and (datetime.datetime.now().hour == 12): # should send on thursdays around noon
+    @tasks.loop(minutes=1.0) # made to check every minute if it's the top of the hour
+    async def thursday_loop(self): # if so, then it'll send something
+        await self.get_memes_channels()
+        #print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
+        if ((datetime.datetime.today().weekday() == 3) and (datetime.datetime.now().hour == 12) and (datetime.datetime.now().minute == 0)): # should send on thursdays around noon
             print(channelList)
             await self.finally_thursday()
-        else:
-            print("not thursday...")
+        elif (datetime.datetime.now().minute == 0):
+            print("thursday loop hour marker: "+ time.strftime("%H:%M:%S", time.localtime()))
+        #else:
+            #print("not thursday...")
 
-    @tasks.loop(hours=1.0)
-    async def fgo_reminder_loop(self):
-        print ("fgo loop at: " + time.strftime("%H:%M:%S", time.localtime()))
-        if (datetime.datetime.now(timezone.utc).hour == 4):
+    @tasks.loop(minutes=1.0) # at the top of every hour that isn't 23:00, it prints it checked in the terminal
+    async def fgo_reminder_loop(self): # if it _is_ 23:00, it sends something to the opt-in-ed channels
+        #print ("fgo loop at: " + time.strftime("%H:%M:%S", time.localtime()))
+        if ((datetime.datetime.now(timezone.utc).hour == 4) & (datetime.datetime.now(timezone.utc).minute == 0)):
             await self.fgo_login_reminder()
-        else:
-            print(await self.fgo_timeup())
+        elif (datetime.datetime.now().minute == 0):
+            print("fgo loop hour marker: "+ time.strftime("%H:%M:%S", time.localtime()))
+        #else:
+            #print(await self.fgo_timeup())
 
     @commands.command(name='optOut', help='opts the current channel out of Autosend') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
@@ -148,7 +157,8 @@ class Autosend(commands.Cog):
     @commands.command(name='fgoTimeUp', help='time until the daily fgo reset')
     async def fgoTimeUp(self, ctx):
         string = await self.fgo_timeup()
-        await ctx.send(string + " until the daily reset")
+        await ctx.send(string)
+
 
 def setup(bot):
     bot.add_cog(Autosend(bot))
