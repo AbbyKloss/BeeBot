@@ -24,11 +24,12 @@ class Autosend(commands.Cog):
         self.bot = bot
         self.thursday_loop.start()
         self.fgo_reminder_loop.start()
+        self.meme_checker.start()
 
     async def get_memes_channels(self):
         for guild in self.bot.guilds:
                 for channel in guild.text_channels:
-                    if ("memes" in channel.name) and (str(channel.id) not in optOutList) and (str(channel.id) not in channelList):
+                    if ("meme" in channel.name) and (str(channel.id) not in optOutList) and (str(channel.id) not in channelList):
                         channelList.append(channel.id)
 
     async def finally_thursday(self):
@@ -60,7 +61,6 @@ class Autosend(commands.Cog):
 
     @tasks.loop(minutes=1.0) # made to check every minute if it's the top of the hour
     async def thursday_loop(self): # if so, then it'll send something
-        await self.get_memes_channels()
         #print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
         if ((datetime.datetime.today().weekday() == 3) and (datetime.datetime.now().hour == 12) and (datetime.datetime.now().minute == 0)): # should send on thursdays around noon
             print(channelList)
@@ -79,6 +79,11 @@ class Autosend(commands.Cog):
             print("fgo loop hour marker: "+ time.strftime("%H:%M:%S", time.localtime()))
         #else:
             #print(await self.fgo_timeup())
+
+    @tasks.loop(hours=24.0)
+    async def meme_checker(self):
+        print("daily meme channel check: " + time.strftime("%H:%M:%S", time.localtime()))
+        await self.get_memes_channels()
 
     @commands.command(name='optOut', help='opts the current channel out of Autosend') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
