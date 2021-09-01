@@ -134,7 +134,7 @@ class BotCommands(commands.Cog):
         else:
             await ctx.reply("currently an nsfw command ;>", mention_author=False)
 
-    @commands.command(name='imageSearch', help='google image search!')
+    @commands.command(name='iSearch', help='google image search!')
     async def image_search(self, ctx, *args):
         if args != "":
             query = '{}'.format(' '.join(args)) # this and the above line are copied from the google search command
@@ -182,7 +182,7 @@ class BotCommands(commands.Cog):
         else:
             await ctx.reply("i can't search for nothing,,", mention_author=False) # making sure there's something to search
 
-    @commands.command(name='currentImage', hidden=True)
+    @commands.command(name='cImage', hidden=True)
     @commands.is_owner()
     async def current_image(self, ctx):
         if (self.bot.currentNSFW and (not ctx.channel.is_nsfw())): # if the current image comes from an nsfw channel, you can't send it outside of those
