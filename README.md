@@ -18,6 +18,11 @@ there are also hidden commands but those are just for the person hosting the bot
   - datetime
 
 ## Recent Edits
+(8/31/2021)
+- added a google image search, works with safesearch to keep nsfw out of not that areas
+- modified all the commands to reply to the person that sent them
+- added an owner-only command to send the last-sent image
+
 (8/5/2021)
 - added a reminder for Fate/Grand Order so people don't forget to log in
 - <fgoTimeUp to know how far away the daily reset is

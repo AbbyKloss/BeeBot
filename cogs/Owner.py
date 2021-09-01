@@ -37,7 +37,7 @@ class Owner(commands.Cog):
     @commands.command(name='addHi', hidden=True) # adds a greeting to files/helloList.txt
     @commands.is_owner()
     async def addHi(self, ctx, *args):            # if you're not me and you're running a copy of this, add your userID to the .env file
-        if args != ():                      # i did "$dotenv set ADMIN_ID [userID]"
+        if args != ():
             newGreeting = '{}'.format(' '.join(args))
             if not (newGreeting in helloList):
                 helloFile = open("files/helloList.txt", "a")
