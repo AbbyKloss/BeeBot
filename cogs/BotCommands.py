@@ -6,13 +6,21 @@ from googleapiclient import errors as gerrors
 from pathlib import Path
 import discord
 import random
-import os
+from os import remove #hopefully this keeps it working
+import requests
 
 heartsList = [":heart:",":orange_heart:",":yellow_heart:",":green_heart:",":blue_heart:",":purple_heart:",":brown_heart:",":white_heart:",":cupid:",":gift_heart:",":sparkling_heart:",":heartpulse:",":heartbeat:",":revolving_hearts:",":two_hearts:",":heart_exclamation:",":heart_decoration:"] #there's a finite amount of heart emojis, i don't need a separate file for them
 helloFile = open("files/helloList.txt", "r") #opens a file to let you have as many or as few greetings as you'd like. allows for modularity in the bot without having to restart it every time you wanna add a greeting
 helloList = helloFile.read().splitlines()
 helloFile.close()
 albumList = list()
+albumList2 = list()
+
+etag = ""
+
+#print("\n" + self.bot.IMGUR_ID + "\n")
+
+
 
 _search_params = { # for <imageSearch
     'q': '...',
@@ -29,7 +37,12 @@ _search_params = { # for <imageSearch
 class BotCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        #sebbyAlbum = bot.imgClient.get_album('dYPnFKD')
+        #sebbyAlbum = bot.imgClient.get_album('dYPnFKD')# notcat album (soon to be sebby album)
+        #self.payload={'client_id': '{bot.IMGUR_ID}', 'client_secret': '{bot.IMGUR_SECRET}'}
+        #self.payload = {}
+        #self.files = {}
+        #self.headers = {'Authorization': 'Client-ID {}'.format(self.bot.IMGUR_ID)}
+        
 
     @commands.command(name='hi', help="henlo :>") # says hello :>
     async def hello(self, ctx, *args):
@@ -62,7 +75,9 @@ class BotCommands(commands.Cog):
     @commands.command(name='google', help='google search!!') # kind of disgustingly rudimentary, it just returns a link of the first thing it finds
     async def websearch(self, ctx, *args):
         if args != "":
-            query = '{}'.format(' '.join(args))
+            query = "{}".format(" ".join(args))
+            query = query.replace("'", "")
+            query = query.replace("’", "")
             for output in search(query, tld="com", num=1, stop=1, pause=1.0): # API calls! fun! (it takes a fuckin while to actually get a reasult and sometimes you just don't get anything)
                 await ctx.reply(output, mention_author=False)
         else:
@@ -137,7 +152,9 @@ class BotCommands(commands.Cog):
     @commands.command(name='iSearch', help='google image search!')
     async def image_search(self, ctx, *args):
         if args != "":
-            query = '{}'.format(' '.join(args)) # this and the above line are copied from the google search command
+            query = "{}".format(" ".join(args)) # this and the above line are copied from the google search command
+            query = query.replace("'", "")
+            query = query.replace("’", "")
             _search_params['q'] = query         # modifying the dictionary
             if ctx.channel.is_nsfw(): 
                 _search_params['safe'] = 'off'
@@ -151,7 +168,7 @@ class BotCommands(commands.Cog):
             file_path = Path("images/currentImage.jpg") # deleting current currentImage.jpg
             if file_path.is_file():
                 try:
-                    os.remove(file_path)
+                    remove(file_path)
                 except OSError as e:
                     filename = "currentImage(1).jpg"
                     fp = "images/currentImage(1).jpg"
@@ -192,6 +209,23 @@ class BotCommands(commands.Cog):
             embed = discord.Embed(title="current image", color=int(hex(int('f5a9b8', 16)), 0)) # color = f5a9b8, seems complicated?
             embed.set_image(url="attachment://currentImage.jpg")
             await ctx.reply(file=file,  embed=embed, mention_author=False)
+
+    @commands.command(name='Imgur', help="sends an image from an imgur album! (defaults to cats)")
+    async def imgur(self, ctx, *args):
+        string = "Jfni3" # test = FLyd8ka
+        if args != ():
+            string = args[0]
+            if ("https://imgur.com/gallery/" in string):
+                string = string.split('/')[4]
+            elif (".jpeg" or ".png" or ".gif") in string:
+                await ctx.reply(string, mention_author=False)
+                return
+        url = "https://api.imgur.com/3/album/{}/images".format(string)
+        albumList2.clear()
+        response = requests.request("GET", url=url, headers={'Authorization': 'Client-ID {}'.format(self.bot.IMGUR_ID)}, data={}, files={})
+        for i in response.json()['data']:
+            albumList2.append(i['link'])
+        await ctx.reply(str(random.choice(albumList2)), mention_author=False)
         
 
 

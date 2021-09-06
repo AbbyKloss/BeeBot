@@ -19,10 +19,7 @@ from google_images_search import GoogleImagesSearch
 load_dotenv() # make sure you have all the things below filled out in your .env file
 TOKEN    = os.getenv('DISCORD_TOKEN')
 ADMIN_ID = os.getenv('ADMIN_ID')
-IMGUR_ID = os.getenv('IMGUR_ID')
-IMGUR_SECRET = os.getenv('IMGUR_SECRET')
 
-imgClient = ImgurClient(IMGUR_ID, IMGUR_SECRET)
 
 bot = commands.Bot(command_prefix="<", case_insensitive=True, owner_id=int(ADMIN_ID))
 
@@ -30,8 +27,13 @@ bot = commands.Bot(command_prefix="<", case_insensitive=True, owner_id=int(ADMIN
 bot.GOOGLE_ID = str(os.getenv('GOOGLE_ID'))
 bot.GOOGLE_CX = str(os.getenv('GOOGLE_CX'))
 bot.GOOGLE_BU = str(os.getenv('GOOGLE_BU'))
+bot.IMGUR_ID = os.getenv('IMGUR_ID')
+bot.IMGUR_SECRET = os.getenv('IMGUR_SECRET')
 bot.backupFlag = False # a way to get around the 100 queries/day, maybe don't do this, idk if im violating something here
+
 bot.gis = GoogleImagesSearch(bot.GOOGLE_ID, bot.GOOGLE_CX) # i just ran out of test queries very quick because my code messed up
+imgClient = ImgurClient(bot.IMGUR_ID, bot.IMGUR_SECRET) # may not need soon
+
 bot.imgClient = imgClient
 bot.currentNSFW = False
 

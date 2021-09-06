@@ -18,6 +18,10 @@ there are also hidden commands but those are just for the person hosting the bot
   - datetime
 
 ## Recent Edits
+(9/5/2021)
+- added <imgur, using requests
+- im kinda proud of the requests part
+
 (9/1/2021)
 - imageSearch and currentImage are now iSearch and cImage
 
@@ -49,3 +53,4 @@ there are also hidden commands but those are just for the person hosting the bot
 - figure out tweepy so i can add out of touch thursdays to this
 - maybe move all the optin/optout files to a different folder
 - test webhooks
+- need to rewrite <notcat to use requests, should be simple
