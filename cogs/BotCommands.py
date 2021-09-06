@@ -1,12 +1,11 @@
 from discord.ext import commands
 from googlesearch import search
-from imgurpython import ImgurClient
 from google_images_search import GoogleImagesSearch
-from googleapiclient import errors as gerrors
+from googleapiclient import errors as gerrors # unused?
 from pathlib import Path
 import discord
 import random
-from os import remove #hopefully this keeps it working
+from os import remove
 import requests
 
 heartsList = [":heart:",":orange_heart:",":yellow_heart:",":green_heart:",":blue_heart:",":purple_heart:",":brown_heart:",":white_heart:",":cupid:",":gift_heart:",":sparkling_heart:",":heartpulse:",":heartbeat:",":revolving_hearts:",":two_hearts:",":heart_exclamation:",":heart_decoration:"] #there's a finite amount of heart emojis, i don't need a separate file for them
@@ -17,8 +16,6 @@ albumList = list()
 albumList2 = list()
 
 etag = ""
-
-#print("\n" + self.bot.IMGUR_ID + "\n")
 
 
 
@@ -36,13 +33,7 @@ _search_params = { # for <imageSearch
 
 class BotCommands(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
-        #sebbyAlbum = bot.imgClient.get_album('dYPnFKD')# notcat album (soon to be sebby album)
-        #self.payload={'client_id': '{bot.IMGUR_ID}', 'client_secret': '{bot.IMGUR_SECRET}'}
-        #self.payload = {}
-        #self.files = {}
-        #self.headers = {'Authorization': 'Client-ID {}'.format(self.bot.IMGUR_ID)}
-        
+        self.bot = bot        
 
     @commands.command(name='hi', help="henlo :>") # says hello :>
     async def hello(self, ctx, *args):
@@ -138,16 +129,20 @@ class BotCommands(commands.Cog):
         else:
             await ctx.reply("You Rolled.", mention_author=False)
 
-    @commands.command(name='notCat', help="cat pix", hidden=True)
-    #@commands.is_nsfw()
-    async def not_cat(self, ctx):
+    @commands.command(name='notCat', help="cat pix", hidden=True) # gonna be <sebby if i get the imgur link for it
+    #@commands.is_nsfw()                        # for now it's a doujin
+    async def not_cat(self, ctx):               # doesn't need to exist since i have <imgur, but oh well, im keeping it
         if ctx.channel.is_nsfw(): 
+            url = "https://api.imgur.com/3/album/J3bm5gs/images"
             albumList.clear()
-            for img in self.bot.imgClient.get_album_images('J3bm5gs'):
-                    albumList.append(img.link)
+            response = requests.request("GET", url=url, headers={'Authorization': 'Client-ID {}'.format(self.bot.IMGUR_ID)}, data={}, files={})
+            for i in response.json()['data']:
+                albumList.append(i['link'])
             await ctx.reply(str(random.choice(albumList)), mention_author=False)
         else:
             await ctx.reply("currently an nsfw command ;>", mention_author=False)
+
+    
 
     @commands.command(name='iSearch', help='google image search!')
     async def image_search(self, ctx, *args):
@@ -158,7 +153,7 @@ class BotCommands(commands.Cog):
             _search_params['q'] = query         # modifying the dictionary
             if ctx.channel.is_nsfw(): 
                 _search_params['safe'] = 'off'
-                self.bot.currentNSFW = True
+                self.bot.currentNSFW = True # not robust because it doesn't have to be
             else:
                 _search_params['safe'] = 'medium'
                 self.bot.currentNSFW = False
@@ -176,7 +171,7 @@ class BotCommands(commands.Cog):
             try:
                 self.bot.gis.search(search_params=_search_params, path_to_dir="images/", custom_image_name='currentImage') # testing thingy
 
-            except:# (commands.errors.CommandInvokeError or gerrors.HttpError): # something complicated to get around the 100 queries/day
+            except: # something complicated to get around the 100 queries/day
                 if (not self.bot.backupFlag):
                     self.bot.backupFlag = True
                     self.gis = GoogleImagesSearch(self.GOOGLE_BU, self.GOOGLE_CX) # now i have 200 queries/day
@@ -193,9 +188,6 @@ class BotCommands(commands.Cog):
             embed.set_footer(text=error_message)
             embed.set_image(url="attachment://currentImage.jpg")
             await ctx.reply(file=file,  embed=embed, mention_author=False)
-
-            #print(str(type(self.bot.gis.results())) + " ; " + _search_params['q']) # more testing
-            #await ctx.send(str(self.bot.gis.results())) # bullshit
         else:
             await ctx.reply("i can't search for nothing,,", mention_author=False) # making sure there's something to search
 
@@ -206,17 +198,17 @@ class BotCommands(commands.Cog):
             await ctx.reply("currentImage is nsfw, can't send here :/", mention_author=False)
         else:
             file = discord.File("images/currentImage.jpg", filename="currentImage.jpg")
-            embed = discord.Embed(title="current image", color=int(hex(int('f5a9b8', 16)), 0)) # color = f5a9b8, seems complicated?
+            embed = discord.Embed(title="current image", color=int(hex(int('f5a9b8', 16)), 0)) # color = #f5a9b8, seems complicated?
             embed.set_image(url="attachment://currentImage.jpg")
             await ctx.reply(file=file,  embed=embed, mention_author=False)
 
     @commands.command(name='Imgur', help="sends an image from an imgur album! (defaults to cats)")
     async def imgur(self, ctx, *args):
-        string = "Jfni3" # test = FLyd8ka
+        string = "Jfni3"
         if args != ():
             string = args[0]
             if ("https://imgur.com/gallery/" in string):
-                string = string.split('/')[4]
+                string = string.split('/')[4] # separating the url into blocks, picking the albumID one
             elif (".jpeg" or ".png" or ".gif") in string:
                 await ctx.reply(string, mention_author=False)
                 return
@@ -226,7 +218,7 @@ class BotCommands(commands.Cog):
         for i in response.json()['data']:
             albumList2.append(i['link'])
         await ctx.reply(str(random.choice(albumList2)), mention_author=False)
-        
+        # at a certain point, i need more cogs
 
 
 def setup(bot):
