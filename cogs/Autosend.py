@@ -19,7 +19,7 @@ fgoFile.close()
 fgoChannelList = fgoList.copy() # not currently sure i need this, i haven't planned very far ahead
 #startMinute = datetime.datetime.now(timezone.utc).minute
 
-class Autosend(commands.Cog):
+class Autosend(commands.Cog, description="opt in/out of things"):
     def __init__(self, bot):
         self.bot = bot
         self.thursday_loop.start()
@@ -85,7 +85,7 @@ class Autosend(commands.Cog):
         print("daily meme channel check: " + time.strftime("%H:%M:%S", time.localtime()))
         await self.get_memes_channels()
 
-    @commands.command(name='optOut', help='opts the current channel out of Autosend') #this is a mess, comments here are mostly for me
+    @commands.command(name='optOut', help='opts the current channel out of Autosend', usage='<optout') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
         badChannel = str(ctx.message.channel.id)
         print(badChannel)
@@ -107,7 +107,7 @@ class Autosend(commands.Cog):
         else:
             await ctx.reply("this channel already doesn't get anything from Autosend..", mention_author=False)
 
-    @commands.command(name='optIn', help='opts the current channel into Autosend')
+    @commands.command(name='optIn', help='opts the current channel into Autosend', usage='<optin')
     async def optIn(self, ctx):
         goodChannel = str(ctx.message.channel.id)
         print(goodChannel)
@@ -129,7 +129,7 @@ class Autosend(commands.Cog):
         else:
             await ctx.reply("you're already good to go!!", mention_author=False)
 
-    @commands.command(name='fgoOptIn', help='sets a reminder to log into fgo!')
+    @commands.command(name='fgoOptIn', help='sets a reminder to log into fgo!', usage='<fgooptin')
     async def fgoOptIn(self, ctx):
         goodChannel = str(ctx.message.channel.id)
         if not(goodChannel in fgoChannelList):
@@ -144,7 +144,7 @@ class Autosend(commands.Cog):
         else:
             await ctx.reply("reminder's already set!", mention_author=False)
 
-    @commands.command(name='fgoOptOut', help='removes the fgo login reminder')
+    @commands.command(name='fgoOptOut', help='removes the fgo login reminder', usage='<fgooptout')
     async def fgoOptOut(self, ctx):
         badChannel = str(ctx.message.channel.id)
         if (badChannel in fgoChannelList):
@@ -159,7 +159,7 @@ class Autosend(commands.Cog):
         else:
             await ctx.reply("you already don't get reminders :/", mention_author=False)
 
-    @commands.command(name='fgoTimeUp', help='time until the daily fgo reset')
+    @commands.command(name='fgoTimeUp', help='time until the daily fgo reset', usage='<fgotimeup')
     async def fgoTimeUp(self, ctx):
         string = await self.fgo_timeup()
         await ctx.reply(string, mention_author=False)
