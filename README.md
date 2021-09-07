@@ -7,23 +7,23 @@ incrementally adding new features as i get the inspiration and motivation to
 Command    |   Usage
 
 Autosend:
--fgoOptIn  
--fgoOptOut 
--fgoTimeUp 
--OptIn     
--optOut    
+- fgoOptIn  
+- fgoOptOut 
+- fgoTimeUp 
+- OptIn     
+- optOut    
 BotCommands:
--3         [@user]
--f         [@user]
--google    <search terms>
--hi        [@user]
--roll      <'n'd'x'> [adv/dis]
+- 3         [@user]
+- f         [@user]
+- google    <search terms>
+- hi        [@user]
+- roll      <'n'd'x'> [adv/dis]
 Images:
--Imgur     [imgur album url/ID]
--iSearch   <search terms>
+- Imgur     [imgur album url/ID]
+- iSearch   <search terms>
 Info:
--github    
--invite    
+- github    
+- invite    
 
 there are also hidden commands but those are just for the person hosting the bot
 
