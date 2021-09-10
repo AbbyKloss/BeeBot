@@ -11,19 +11,23 @@ Autosend:
 - fgoOptOut 
 - fgoTimeUp 
 - OptIn     
-- optOut    
+- optOut
+
 BotCommands:
 - 3         [@user]
 - f         [@user]
 - google    <search terms>
 - hi        [@user]
 - roll      <'n'd'x'> [adv/dis]
+
 Images:
 - Imgur     [imgur album url/ID]
 - iSearch   <search terms>
+
 Info:
 - github    
-- invite    
+- invite
+- prefix    <prefix>
 
 there are also hidden commands but those are just for the person hosting the bot
 
@@ -35,12 +39,19 @@ there are also hidden commands but those are just for the person hosting the bot
   - google-images-search
   - python-dotenv
   - discord
-  - time
-  - datetime
+  - time (included?)
+  - datetime (included?)
   - requests
   - discord-pretty-help (i'd rather build my own, this won't stay too long)
 
 ## Recent Edits
+(9/9/2021) (v0.3.0) (yes im saying it's major enough for a new number)
+- moved from dumb text files to a sqlite3 database
+- made it possible to change bot prefix per guild
+- added database things that happen when AbBot leaves/joins a guild
+- database opens and closes once each function call
+- fun fact: sqlite3 is included in most linux distros and every python install (to my knowledge)
+
 (9/6/2021) (v0.2.4)
 - removed imgurpython
 - brought on discord-pretty-help
@@ -84,6 +95,6 @@ there are also hidden commands but those are just for the person hosting the bot
 
 ## Todo
 - figure out tweepy so i can add out of touch thursdays to this
-- maybe move all the optin/optout files to a different folder
+- ~~maybe move all the optin/optout files to a different folder~~ did a database
 - test webhooks
 - maybe separate BotCommands a bit?
