@@ -8,7 +8,7 @@ default prefix is '<', you can change that with prefix (under Info:)
 
 Command    |   Usage
 
-###Autosend:
+### Autosend:
 - fgoOptIn  
 - fgoOptOut 
 - fgoTimeUp 
