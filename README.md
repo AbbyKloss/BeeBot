@@ -4,6 +4,7 @@ just a bot im making. no real plans yet
 incrementally adding new features as i get the inspiration and motivation to
 
 ## commands
+### note: {this is a required parameter}
 Command    |   Usage
 
 Autosend:
@@ -16,18 +17,18 @@ Autosend:
 BotCommands:
 - 3         [@user]
 - f         [@user]
-- google    <search terms>
+- google    {search terms}
 - hi        [@user]
 - roll      <'n'd'x'> [adv/dis]
 
 Images:
 - Imgur     [imgur album url/ID]
-- iSearch   <search terms>
+- iSearch   {search terms}
 
 Info:
 - github    
 - invite
-- prefix    <prefix>
+- prefix    {prefix}
 
 there are also hidden commands but those are just for the person hosting the bot
 
