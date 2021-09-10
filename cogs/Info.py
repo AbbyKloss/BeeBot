@@ -24,7 +24,7 @@ class Info(commands.Cog, description="basic info"):
         if (args):
             con = sqlite3.connect('files/AbBotDatabase.db')
             cur = con.cursor()
-            prefix = str(args[0])
+            prefix = str(args[0][:5])
             cur.execute("update Guilds set Prefix=? where GuildID=?", (prefix, int(ctx.guild.id), ))
             con.commit()
             con.close()

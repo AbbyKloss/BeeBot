@@ -4,31 +4,34 @@ just a bot im making. no real plans yet
 incrementally adding new features as i get the inspiration and motivation to
 
 ## commands
-### note: {this is a required parameter}
+default prefix is '<', you can change that with prefix (under Info:)
+
 Command    |   Usage
 
-Autosend:
+###Autosend:
 - fgoOptIn  
 - fgoOptOut 
 - fgoTimeUp 
 - OptIn     
 - optOut
 
-BotCommands:
+### BotCommands:
 - 3         [@user]
 - f         [@user]
 - google    {search terms}
 - hi        [@user]
 - roll      <'n'd'x'> [adv/dis]
 
-Images:
+### Images:
 - Imgur     [imgur album url/ID]
 - iSearch   {search terms}
 
-Info:
+### Info:
 - github    
 - invite
 - prefix    {prefix}
+
+#### note: {this is a required parameter}
 
 there are also hidden commands but those are just for the person hosting the bot
 
