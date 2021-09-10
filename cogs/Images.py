@@ -2,7 +2,7 @@ from discord.ext import commands
 from google_images_search import GoogleImagesSearch
 from pathlib import Path
 import random
-from os import remove
+from os import remove, listdir
 import requests
 import discord
 
@@ -14,7 +14,7 @@ _search_params = {
     'q': '...',
     'num': 1,
     'safe': 'off',
-    'fileType': 'jpg'
+    'fileType': 'png|jpg'
     #'imgType': 'clipart|face|lineart|news|photo',
     #'imgSize': 'huge|icon|large|medium|small|xlarge|xxlarge',
     #'imgDominantColor': 'black|blue|brown|gray|green|orange|pink|purple|red|teal|white|yellow',
@@ -43,6 +43,8 @@ class Images(commands.Cog, description="all of the commands that deal with image
     @commands.command(name='iSearch', help='google image search!', usage='<search terms>')
     async def image_search(self, ctx, *args):
         if args != "":
+            filename = ""
+            fp = ""
             query = "{}".format(" ".join(args)) # this and the above line are copied from the google search command
             query = query.replace("'", "")
             query = query.replace("’", "")
@@ -55,35 +57,43 @@ class Images(commands.Cog, description="all of the commands that deal with image
                 _search_params['safe'] = 'medium'
                 self.bot.currentNSFW = False
             error_message = ""
-            filename = "currentImage.jpg"
-            fp = "images/currentImage.jpg"
-            file_path = Path("images/currentImage.jpg") # deleting current currentImage.jpg
-            if file_path.is_file():
+            file_path = listdir("images/") # deleting current currentImage
+            for item in file_path:
+                #if item.startswith("currentImage"):
+                remove("images/" + item)
+ 
+            '''if file_path.is_file(): # kinda hate all of this
                 try:
                     remove(file_path)
                 except OSError as e:
                     filename = "currentImage(1).jpg"
                     fp = "images/currentImage(1).jpg"
-                    print("Error: %s : %s" % (file_path, e.strerror))
+                    print("Error: %s : %s" % (file_path, e.strerror))'''
             try:
-                self.bot.gis.search(search_params=_search_params, path_to_dir="images/", custom_image_name='currentImage') # testing thingy
+                self.bot.gis.search(search_params=_search_params, path_to_dir="images/")#, custom_image_name='currentImage') # testing thingy
 
             except: # something complicated to get around the 100 queries/day
                 if (not self.bot.backupFlag):
                     self.bot.backupFlag = True
-                    self.gis = GoogleImagesSearch(self.GOOGLE_BU, self.GOOGLE_CX) # now i have 200 queries/day
+                    self.gis = GoogleImagesSearch(self.bot.GOOGLE_ID, self.bot.GOOGLE_CX) # now i have 200 queries/day
                 else:
                     self.bot.backupFlag = False
-                    self.gis = GoogleImagesSearch(self.GOOGLE_ID, self.GOOGLE_CX)
+                    self.gis = GoogleImagesSearch(self.bot.GOOGLE_ID, self.bot.GOOGLE_CX)
                 try:
-                    self.bot.gis.search(search_params=_search_params, path_to_dir="images/", custom_image_name='currentImage') # testing thingy
+                    self.bot.gis.search(search_params=_search_params, path_to_dir="images/")#, custom_image_name='currentImage') # testing thingy
                 except:
                     error_message = "out of queries for the day :/" # runs out quick?
+
+            file_path = listdir("images/")
+            for item in file_path:
+                #if item.startswith("currentImage"):
+                fp = "images/" + item
+                filename = item
 
             file = discord.File(fp, filename=filename)
             embed = discord.Embed(title=query, color=0xf5a9b8) # color = f5a9b8, seems complicated?
             embed.set_footer(text=error_message)
-            embed.set_image(url="attachment://currentImage.jpg")
+            embed.set_image(url="attachment://" + filename)
             await ctx.reply(file=file,  embed=embed, mention_author=False)
         else:
             await ctx.reply("i can't search for nothing,,", mention_author=False) # making sure there's something to search
@@ -94,9 +104,16 @@ class Images(commands.Cog, description="all of the commands that deal with image
         if (self.bot.currentNSFW and (not ctx.channel.is_nsfw())): # if the current image comes from an nsfw channel, you can't send it outside of those
             await ctx.reply("currentImage is nsfw, can't send here :/", mention_author=False)
         else:
-            file = discord.File("images/currentImage.jpg", filename="currentImage.jpg")
+            filename = ""
+            fp = ""
+            file_path = listdir("images/")
+            for item in file_path:
+                #if item.startswith("currentImage"):
+                fp = "images/" + item
+                filename = item
+            file = discord.File(fp, filename=filename)
             embed = discord.Embed(title="current image", description=self.bot.imageDesc, color=0xf5a9b8) # color = #f5a9b8, seems complicated?
-            embed.set_image(url="attachment://currentImage.jpg")
+            embed.set_image(url="attachment://" + filename)
             await ctx.reply(file=file, embed=embed, mention_author=False)
 
     @commands.command(name='Imgur', help="sends an image from an imgur album! (defaults to cats)", usage='[imgur album url/ID]')
