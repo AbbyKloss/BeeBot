@@ -23,14 +23,29 @@ class Info(commands.Cog, description="basic info"):
     async def prefix(self, ctx, *args):
         if (args):
             con = sqlite3.connect('files/AbBotDatabase.db')
-            cur = con.cursor()
             prefix = str(args[0][:5])
-            cur.execute("update Guilds set Prefix=? where GuildID=?", (prefix, int(ctx.guild.id), ))
+            con.cursor().execute("update Guilds set Prefix=? where GuildID=?", (prefix, int(ctx.guild.id), ))
             con.commit()
             con.close()
             await ctx.reply("ok! my prefix has been changed to: `" + prefix + "`", mention_author=False)
         else:
             await ctx.reply("no prefix entered", mention_author=False)
+
+    @commands.command(name='AutosendTest', help='checks if current channel gets Autosend notifs', hidden=True)
+    async def autosend_test(self, ctx):
+        con = sqlite3.connect('files/AbBotDatabase.db')
+        reply = ""
+        for row in con.cursor().execute("select * from Channels where ChannelID=?", (int(ctx.message.channel.id), )):
+            if (row[2]):
+                reply += "FGO Notifs: Yes ; "
+            else:
+                reply += "FGO Notifs: No  ; "
+            if (row[3]):
+                reply += "Autosend: Yes"
+            else:
+                reply += "Autosend: No"
+        con.close()
+        await ctx.reply(reply, mention_author=False)
 
 
 

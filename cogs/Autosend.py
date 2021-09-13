@@ -128,7 +128,7 @@ class Autosend(commands.Cog, description="opt in/out of things"): # TODO: rewrit
         con = sqlite3.connect('files/AbBotDatabase.db')
         cur = con.cursor()
         cur.execute("select exists(select * from Channels where ChannelID=?)", (int(ctx.message.channel.id),))
-        if (cur.fetchone()[0]):
+        if (not cur.fetchone()[0]):
             cur.execute("insert into Channels values (?, ?, 0, 0)", (int(ctx.message.channel.id), int(ctx.guild.id)))
         else:
             cur.execute("update Channels set FGOBool=0 where ChannelID=?", (int(ctx.message.channel.id),))
