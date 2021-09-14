@@ -49,6 +49,12 @@ there are also hidden commands but those are just for the person hosting the bot
   - discord-pretty-help (i'd rather build my own, this won't stay too long)
 
 ## Recent Edits
+(9/14/2021) (v0.3.1)
+- made the optouts not make new database entries. They also delete empty ones (i.e. Auto/FGOBool == 0)
+- made every ctx.author.name into ctx.author.display_name. now everyone has a nickname in the eyes of AbBot
+- added an echo command in Owner, will later use it to test channel things, probably
+- toyed with a prefixless change prefix command. didn't work, look at it more later
+
 (9/9/2021) (v0.3.0) (yes im saying it's major enough for a new number)
 - moved from dumb text files to a sqlite3 database
 - made it possible to change bot prefix per guild

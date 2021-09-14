@@ -116,14 +116,14 @@ class Owner(commands.Cog):
     @commands.command(name="ownerCheck", hidden=True)
     @commands.is_owner()
     async def owner_check(self, ctx):
-        await ctx.send(f'howdy **{ctx.author.name}**!')
+        await ctx.send(f'howdy **{ctx.author.display_name}**!')
 
     @commands.command(name="homeowneredCheck", hidden=True)
     async def homeownered_check(self, ctx):
         if ctx.author.id == 537075857596874753:
-            await ctx.send(f'howdy **{ctx.author.name}**!')
+            await ctx.reply(f'howdy **{ctx.author.display_name}**!', mention_author=False)
         else:
-            await ctx.send("fuck you you rat bastard trying to look like **Homeownered (David)#0656**")
+            await ctx.reply("fuck you you rat bastard trying to look like <@!537075857596874753>", mention_author=True)
 
     @commands.command(name="customStatus", hidden=True)
     @commands.is_owner()
@@ -162,7 +162,15 @@ class Owner(commands.Cog):
         if args != ():
             printable = '{}'.format(' '.join(args))
             print('\n' + printable + '\n')
-            await ctx.send('done!')
+            await ctx.reply('done!', mention_author=False)
+
+    @commands.command(name="echo", hidden=True)
+    @commands.is_owner()
+    async def echo(self, ctx, *args):
+        if args != ():
+            printable = '{}'.format(' '.join(args))
+            print('\n' + printable + '\n')
+            await ctx.reply(printable, mention_author=False)
 
 def setup(bot):
     bot.add_cog(Owner(bot))

@@ -17,17 +17,17 @@ class BotCommands(commands.Cog, description="most of the commands"):
     @commands.command(name='hi', help="henlo :>", usage='[@user]') # says hello :>
     async def hello(self, ctx, *args):
         if args != ():
-            response = f'**{ctx.author.name}** said ' + random.choice(helloList) + ' to **'+ '{}'.format(' '.join(args)) + '**'
+            response = f'**{ctx.author.display_name}** said ' + random.choice(helloList) + ' to **'+ '{}'.format(' '.join(args)) + '**'
         else:
-            response = random.choice(helloList) + f' **{ctx.author.name}**'
+            response = random.choice(helloList) + f' **{ctx.author.display_name}**'
         await ctx.reply(response, mention_author=False)
 
     @commands.command(name='f', help="pays respects", usage='[@user]') # press f to pay respects
     async def ffunc(self, ctx, *args):
         if args != ():
-            response = f'**{ctx.author.name}** has paid their respects for **'+ '{}'.format(' '.join(args)) + "** " + random.choice(heartsList)
+            response = f'**{ctx.author.display_name}** has paid their respects for **'+ '{}'.format(' '.join(args)) + "** " + random.choice(heartsList)
         else:
-            response = f'**{ctx.author.name}** has paid their respects ' + random.choice(heartsList)
+            response = f'**{ctx.author.display_name}** has paid their respects ' + random.choice(heartsList)
         await ctx.reply(response, mention_author=False)
 
     @commands.command(name='3', help="<3", usage='[@user]') # does a heart emoji from heartsList
@@ -75,7 +75,7 @@ class BotCommands(commands.Cog, description="most of the commands"):
         minnum = size
         sum += add
         if (size > 0) and (num > 0):
-            message = f'**{ctx.author.name}** rolled: ' # setup 
+            message = f'**{ctx.author.display_name}** rolled: ' # setup 
             for i in range(num):
                 randomroll = random.randint(1, size)
                 maxnum = max(maxnum, randomroll)

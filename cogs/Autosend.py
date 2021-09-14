@@ -86,16 +86,19 @@ class Autosend(commands.Cog, description="opt in/out of things"): # TODO: rewrit
 
     @commands.command(name='optOut', help='opts the current channel out of Autosend', usage='<optout') #this is a mess, comments here are mostly for me
     async def optOut(self, ctx):
+        string = ""
         con = sqlite3.connect('files/AbBotDatabase.db')
         cur = con.cursor()
         cur.execute("select exists(select * from Channels where ChannelID=?)", (int(ctx.message.channel.id),))
         if (not cur.fetchone()[0]):
-            cur.execute("insert into Channels values (?, ?, 0, 0)", (int(ctx.message.channel.id), int(ctx.guild.id)))
+            string = "This channel already doesn't get Autosend"
         else:
             cur.execute("update Channels set AutoBool=0 where ChannelID=?", (int(ctx.message.channel.id),))
+            cur.execute("delete from Channels where FGOBool=0 and AutoBool=0")
+            string = "done! no more Autosend for this channel :>"
         con.commit()
         con.close()
-        await ctx.reply("done! no more Autosend for this channel :>", mention_author=False)
+        await ctx.reply(string, mention_author=False)
 
     @commands.command(name='optIn', help='opts the current channel into Autosend', usage='<optin')
     async def optIn(self, ctx):
@@ -125,16 +128,19 @@ class Autosend(commands.Cog, description="opt in/out of things"): # TODO: rewrit
 
     @commands.command(name='fgoOptOut', help='removes the fgo login reminder', usage='<fgooptout')
     async def fgoOptOut(self, ctx):
+        string = ""
         con = sqlite3.connect('files/AbBotDatabase.db')
         cur = con.cursor()
         cur.execute("select exists(select * from Channels where ChannelID=?)", (int(ctx.message.channel.id),))
         if (not cur.fetchone()[0]):
-            cur.execute("insert into Channels values (?, ?, 0, 0)", (int(ctx.message.channel.id), int(ctx.guild.id)))
+            string = "This channel already doesn't get fgo reminders"
         else:
             cur.execute("update Channels set FGOBool=0 where ChannelID=?", (int(ctx.message.channel.id),))
+            cur.execute("delete from Channels where FGOBool=0 and AutoBool=0")
+            string = "done! no more fgo reminders!"
         con.commit()
         con.close()
-        await ctx.reply("done! no more fgo reminders!", mention_author=False)
+        await ctx.reply(string, mention_author=False)
 
     @commands.command(name='fgoTimeUp', help='time until the daily fgo reset', usage='<fgotimeup')
     async def fgoTimeUp(self, ctx):

@@ -45,8 +45,9 @@ class Info(commands.Cog, description="basic info"):
             else:
                 reply += "Autosend: No"
         con.close()
+        if reply == "":
+            reply = "FGO Notifs: No  ; Autosend: No"
         await ctx.reply(reply, mention_author=False)
-
 
 
 def setup(bot):
