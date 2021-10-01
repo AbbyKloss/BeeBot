@@ -18,35 +18,33 @@ Command    |   Usage
 ### BotCommands:
 - 3         [@user]
 - f         [@user]
-- google    {search terms}
+- google    \<search terms\>
 - hi        [@user]
-- roll      <'n'd'x'> [adv/dis]
+- roll      \<'n'd'x'\> [adv/dis]
 
 ### Images:
 - Imgur     [imgur album url/ID]
-- iSearch   {search terms}
+- iSearch   \<search terms\>
 
 ### Info:
 - github    
 - invite
-- prefix    {prefix}
+- prefix    \<prefix\>
 
-#### note: {this is a required parameter}
+#### note: \<this is a required parameter\>
 
 there are also hidden commands but those are just for the person hosting the bot
 
 ## Requirements to run the bot yourself:
 (i think this is it, im not entirely sure)  
   pip installs:  
-  - beautifulsoup4
-  - google-api-python-client
-  - google-images-search
-  - python-dotenv
-  - discord
-  - time (included?)
-  - datetime (included?)
-  - requests
-  - discord-pretty-help (i'd rather build my own, this won't stay too long)
+  - [beautifulsoup4](https://pypi.org/project/beautifulsoup4/) (req. for google-images-search)
+  - [google-api-python-client](https://github.com/googleapis/google-api-python-client)
+  - [google-images-search](https://github.com/arrrlo/Google-Images-Search)
+  - [python-dotenv](https://github.com/theskumar/python-dotenv)
+  - [py-cord](https://github.com/Pycord-Development/pycord)
+  - [requests](https://github.com/psf/requests)
+  - [discord-pretty-help](https://github.com/stroupbslayen/discord-pretty-help) (i'd rather build my own, this won't stay too long)
 
 ## Recent Edits
 (9/14/2021) (v0.3.1)
@@ -107,4 +105,4 @@ there are also hidden commands but those are just for the person hosting the bot
 - figure out tweepy so i can add out of touch thursdays to this
 - ~~maybe move all the optin/optout files to a different folder~~ did a database
 - test webhooks
-- maybe separate BotCommands a bit?
+- ~~maybe separate BotCommands a bit?~~
