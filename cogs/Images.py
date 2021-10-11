@@ -26,20 +26,6 @@ class Images(commands.Cog, description="all of the commands that deal with image
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='notCat', help="cat pix", hidden=True) # gonna be <sebby if i get the imgur link for it
-    #@commands.is_nsfw()                        # for now it's a doujin
-    async def not_cat(self, ctx):               # doesn't need to exist since i have <imgur, but oh well, im keeping it
-        if ctx.channel.is_nsfw(): 
-            url = "https://api.imgur.com/3/album/J3bm5gs/images"
-            albumList.clear()
-            response = requests.request("GET", url=url, headers={'Authorization': 'Client-ID {}'.format(self.bot.IMGUR_ID)}, data={}, files={})
-            for i in response.json()['data']:
-                albumList.append(i['link'])
-            await ctx.reply(str(random.choice(albumList)), mention_author=False)
-        else:
-            await ctx.reply("currently an nsfw command ;>", mention_author=False)
-
-
     @commands.command(name='iSearch', help='google image search!', usage='<search terms>')
     async def image_search(self, ctx, *args):
         if args != "":
