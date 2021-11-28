@@ -1,4 +1,4 @@
-# AbBot
+# BeeBot
 just a bot im making. no real plans yet
 
 incrementally adding new features as i get the inspiration and motivation to
@@ -47,16 +47,19 @@ there are also hidden commands but those are just for the person hosting the bot
   - [discord-pretty-help](https://github.com/stroupbslayen/discord-pretty-help) (i'd rather build my own, this won't stay too long)
 
 ## Recent Edits
+(11/28/2021) (v0.3.3)
+- added r34, gelbooru, danbooru commands
+
 (9/14/2021) (v0.3.1)
 - made the optouts not make new database entries. They also delete empty ones (i.e. Auto/FGOBool == 0)
-- made every ctx.author.name into ctx.author.display_name. now everyone has a nickname in the eyes of AbBot
+- made every ctx.author.name into ctx.author.display_name. now everyone has a nickname in the eyes of BeeBot
 - added an echo command in Owner, will later use it to test channel things, probably
 - toyed with a prefixless change prefix command. didn't work, look at it more later
 
 (9/9/2021) (v0.3.0) (yes im saying it's major enough for a new number)
 - moved from dumb text files to a sqlite3 database
 - made it possible to change bot prefix per guild
-- added database things that happen when AbBot leaves/joins a guild
+- added database things that happen when BeeBot leaves/joins a guild
 - database opens and closes once each function call
 - fun fact: sqlite3 is included in most linux distros and every python install (to my knowledge)
 
@@ -99,7 +102,7 @@ there are also hidden commands but those are just for the person hosting the bot
 (6/11/2021) (V 1.0? V <1? idk what a full release of this would look like) (v0.1.0)
 - added commands to change the bot's status to something not in the random lists
 - migrated a surprising amount of things from the main file to Owner.py
-- AbBot.py is kind of just a shell from which to manage everything else now
+- BeeBot.py is kind of just a shell from which to manage everything else now
 
 ## Todo
 - figure out tweepy so i can add out of touch thursdays to this
