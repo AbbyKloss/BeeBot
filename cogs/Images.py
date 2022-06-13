@@ -1,11 +1,11 @@
 from discord.ext import commands
 from google_images_search import GoogleImagesSearch
-from pathlib import Path
 import random
 from os import remove, listdir
 import requests
 import discord
-import requests, random, sys
+import requests, random
+from json.decoder import JSONDecodeError as jsdecode
 
 albumList = list()
 albumList2 = list()
@@ -44,7 +44,12 @@ def booruSearch(searchCode: int, taglist: list) -> str:
         page = 1
         limit = 200
         url = f'https://danbooru.donmai.us/posts.json?page={page}&limit={limit}&[tags]={tagstr}'
-    search = requests.get(url).json()
+    try:
+        search = requests.get(url).json()
+        if (searchCode == 1):
+            search = search['post']
+    except:
+        return "Found none :/"
 
     # if there's no search results, let the user know and end
     if (len(search) == 0):

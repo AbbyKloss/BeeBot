@@ -47,6 +47,10 @@ there are also hidden commands but those are just for the person hosting the bot
   - [discord-pretty-help](https://github.com/stroupbslayen/discord-pretty-help) (i'd rather build my own, this won't stay too long)
 
 ## Recent Edits
+(6/12/2022) (v0.3.5)
+- Added randName, for all your crowdsourced naming needs
+- probably also a few other things, I've made changes without committing them in the last half year
+
 (11/28/2021) (v0.3.3)
 - added r34, gelbooru, danbooru commands
 

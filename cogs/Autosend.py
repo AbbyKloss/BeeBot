@@ -8,7 +8,7 @@ import sqlite3
 
 
 
-class Autosend(commands.Cog, description="opt in/out of things"): # TODO: rewrite this with database in mind
+class Autosend(commands.Cog, description="opt in/out of things"): # TODO: rewrite this with database in mind  (6/12/2022 thought: is this not already done?)
     def __init__(self, bot):
         self.bot = bot
         self.thursday_loop.start()

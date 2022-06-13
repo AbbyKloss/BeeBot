@@ -18,7 +18,7 @@ class Info(commands.Cog, description="basic info"):
     async def github(self, ctx):
         await ctx.reply("here you go! " + choice(heartsList) + "\nhttps://github.com/blampf/AbBot", mention_author=False)
 
-    @commands.command(name='prefix', help='change the prefix! (ADMIN)', usage="<prefix>")
+    @commands.command(name='prefix', help='change the prefix! (ADMIN) (can also be done with \';BeebotPrefix\')', usage="<prefix>")
     @has_permissions(administrator=True)
     async def prefix(self, ctx, *args):
         if (args):
@@ -30,6 +30,22 @@ class Info(commands.Cog, description="basic info"):
             await ctx.reply("ok! my prefix has been changed to: `" + prefix + "`", mention_author=False)
         else:
             await ctx.reply("no prefix entered", mention_author=False)
+
+    @commands.Cog.listener()
+    @has_permissions(administrator=True)
+    async def on_message(self, message):
+        if ((message.content.lower().split()[0] == ";BeebotPrefix".lower()) and (len(message.content.split()) == 2)):
+            con = sqlite3.connect('files/AbBotDatabase.db')
+            prefix = str(message.content.lower().split()[1])
+            con.cursor().execute("update Guilds set Prefix=? where GuildID=?", (prefix, int(message.guild.id), ))
+            con.commit()
+            con.close()
+            await message.reply("ok! my prefix has been changed to: `" + prefix + "`", mention_author=False)
+        elif ((message.content.lower().split()[0] == ";BeebotPrefix".lower()) and (len(message.content.split()) < 2)):
+            await message.reply("No prefix given", mention_author=False)
+        elif ((message.content.lower().split()[0] == ";BeebotPrefix".lower()) and (len(message.content.split()) > 2)):
+            await message.reply("Too many arguments", mention_author=False)
+
 
     @commands.command(name='AutosendTest', help='checks if current channel gets Autosend notifs', hidden=True)
     async def autosend_test(self, ctx):
