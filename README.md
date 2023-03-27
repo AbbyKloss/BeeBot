@@ -45,8 +45,16 @@ there are also hidden commands but those are just for the person hosting the bot
   - [py-cord](https://github.com/Pycord-Development/pycord)
   - [requests](https://github.com/psf/requests)
   - [discord-pretty-help](https://github.com/stroupbslayen/discord-pretty-help) (i'd rather build my own, this won't stay too long)
+  - [schedule](https://schedule.readthedocs.io/en/stable/) (for all Autosend needs)
 
 ## Recent Edits
+(3/26/2023)
+- motiviation has struck after almost a year
+- brought in a new library to handle scheduling things so i don't have to do it painstakingly by hand, welcome schedule
+- now everything's done probably much better than i could've handled it
+- every weekday has a different autosend, she sleeps on weekends
+- slightly changed Info.py, i realized i was getting errors when someone sent an image or if a bot sent something for the prefixchange thing
+
 (6/12/2022) (v0.3.5)
 - Added randName, for all your crowdsourced naming needs
 - probably also a few other things, I've made changes without committing them in the last half year

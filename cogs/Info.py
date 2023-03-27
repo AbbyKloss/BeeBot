@@ -34,6 +34,7 @@ class Info(commands.Cog, description="basic info"):
     @commands.Cog.listener()
     @has_permissions(administrator=True)
     async def on_message(self, message):
+        if (message.author.bot or len(message.content.split()) == 0): return
         if ((message.content.lower().split()[0] == ";BeebotPrefix".lower()) and (len(message.content.split()) == 2)):
             con = sqlite3.connect('files/AbBotDatabase.db')
             prefix = str(message.content.lower().split()[1])
