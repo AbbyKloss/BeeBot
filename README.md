@@ -45,9 +45,13 @@ there are also hidden commands but those are just for the person hosting the bot
   - [py-cord](https://github.com/Pycord-Development/pycord)
   - [requests](https://github.com/psf/requests)
   - [discord-pretty-help](https://github.com/stroupbslayen/discord-pretty-help) (i'd rather build my own, this won't stay too long)
-  - [schedule](https://schedule.readthedocs.io/en/stable/) (for all Autosend needs)
 
 ## Recent Edits
+(3/27/2023)
+- so schedule doesn't work with asynchronous functions
+- i don't do asynchronous functions often enough to truly understand them
+- the old way is back and it's just written a bit better, now it's more flexible and i'm taking advantage of that
+
 (3/26/2023)
 - motiviation has struck after almost a year
 - brought in a new library to handle scheduling things so i don't have to do it painstakingly by hand, welcome schedule
