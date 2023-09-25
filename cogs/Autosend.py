@@ -123,15 +123,21 @@ class Autosend(commands.Cog, description="opt in/out of things"):
 
   @tasks.loop(minutes=1.0) # made to check every minute if it's the top of the hour
   async def weekday_loop(self, debug=False, ctx=None): # if so, then it'll send something
-    #print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
-    print(f"testing thursday | {time.strftime('%H:%M:%S', time.localtime())}")
-    if (not debug) and (not ((datetime.datetime.now().hour == 12) and (datetime.datetime.now().minute == 0))): # checking if noon
+    # print("thursday_loop at: " + time.strftime("%H:%M:%S", time.localtime()))
+    # print(f"testing thursday | {time.strftime('%H:%M:%S', time.localtime())}")
+    if (debug):
+      pass
+    elif (not ((datetime.datetime.now().hour == 12) and (datetime.datetime.now().minute == 0))): # checking if noon
       return
 
     with open(linksPath, "r") as infile:
       data = json.load(infile)
       iter = data["iter"] % len(data[str(datetime.datetime.today().weekday())])
-      link = data[str(datetime.datetime.today().weekday())][iter]
+      linklist = data[str(datetime.datetime.today().weekday())]
+      if type(linklist) == str:
+        link = linklist
+      else:
+        link = data[str(datetime.datetime.today().weekday())][iter]
       
       
 
@@ -163,7 +169,8 @@ class Autosend(commands.Cog, description="opt in/out of things"):
     # messing with the iterator value
     if datetime.datetime.today().weekday() == 6:
       iter = data["iter"] + 1
-      maxes = [len(data[item]) for item in data.keys()]
+      keys = [key for key in data.keys() if key != "iter"]
+      maxes = [len(data[item]) for item in keys]
 
       if iter > 100 + max(maxes): # arbitrary value, basically you will ideally not notice it? this isn't exactly designed, just kinda thrown together
         iter = 0                  # i hope that much is obvious from the many many commented out lines and the general mess of the place
@@ -174,8 +181,8 @@ class Autosend(commands.Cog, description="opt in/out of things"):
         json.dump(data, outfile, indent=2)
     
     if link != "":
+      print(f"Sending: '{link}' | iterator: {data['iter']}")
       if debug and (ctx is not None):
-        print(link)
         await ctx.reply(link, mention_author=False)
         return
       await self.send_daily_link(link)
@@ -183,11 +190,11 @@ class Autosend(commands.Cog, description="opt in/out of things"):
 
   @tasks.loop(minutes=1.0) # at the top of every hour that isn't 23:00, it prints it checked in the terminal
   async def fgo_reminder_loop(self): # if it _is_ 23:00, it sends something to the opt-in-ed channels
-      print(f"testing fgo | {time.strftime('%H:%M:%S', time.localtime())}")
+      # print(f"testing fgo | {time.strftime('%H:%M:%S', time.localtime())}")
       if ((datetime.datetime.now(timezone.utc).hour == 4) & (datetime.datetime.now(timezone.utc).minute == 0)):
           await self.fgo_login_reminder()
-      elif (datetime.datetime.now().minute == 0):
-          print("fgo loop hour marker: "+ time.strftime("%H:%M:%S", time.localtime()))
+      # elif (datetime.datetime.now().minute == 0):
+      #     print("fgo loop hour marker: "+ time.strftime("%H:%M:%S", time.localtime()))
 
   @tasks.loop(hours=24.0)
   async def meme_checker(self):
